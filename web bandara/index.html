@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Rute Penerbangan Bandara Halu Oleo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  
+
+</head>
+<body>
+
+<header class="hero">
+  <div class="overlay">
+    <div class="lang-toggle">
+        <button onclick="setLang('id')" class="active">ID</button>
+        <button onclick="setLang('en')">EN</button>
+    </div>
+    <h1>Rute Penerbangan Bandara Halu Oleo</h1>
+    <p>Informasi resmi rute penerbangan yang beroperasi di Bandara Halu Oleo</p>
+  </div>
+</header>
+
+<nav class="filter">
+  <button class="active" data-filter="all" onclick="filterRoutes('all')">Semua Rute</button>
+  <button data-filter="aktif" onclick="filterRoutes('Aktif')">Rute Aktif</button>
+  <button data-filter="aktifKembali" onclick="filterRoutes('Aktif Kembali')">Rute Aktif Kembali</button>
+  <button data-filter="akanDatang" onclick="filterRoutes('Akan Datang')">Rute Akan Datang</button>
+  <button data-filter="potensi" onclick="filterRoutes('Potensi')">Rute Potensial</button>
+  <button data-filter="tutupSementara" onclick="filterRoutes('Tutup Sementara')">Rute Ditutup Sementara</button>
+  <button data-filter="tutup" onclick="filterRoutes('Tutup')">Rute Ditutup</button>
+</nav>
+
+
+<div id="empty-message" class="empty-message" style="display:none;"></div>
+
+<main id="route-list"></main>
+
+<!-- Simpan Gambar -->
+<div class="export-buttons">
+  <button onclick="saveRouteImage()">🖼 Simpan Gambar Rute</button>
+  <button onclick="saveImageIG()">🖼 IG Feed (1:1)</button>
+  <button onclick="saveImageStory()">📱 IG Story (9:16)</button>
+</div>
+
+<section class="map-section">
+  <h2 id="map-title"></h2>
+  <div id="map"></div>
+</section>
+
+<!-- MODAL DETAIL RUTE -->
+<div id="route-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeRouteModal()">×</span>
+    <h2 id="modal-title"></h2>
+
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<section class="info">
+  <p class="alert">
+    ⚠️ Jadwal dan operasional penerbangan dapat berubah sewaktu-waktu sesuai kebijakan maskapai dan kondisi operasional bandara.
+  </p>
+  <p><strong>Terakhir diperbarui:</strong> <span id="last-update"></span></p>
+  <p><strong>Waktu setempat:</strong> <span id="current-time"></span></p>
+</section>
+
+
+<footer>
+  <p>© 2026 Informasi Rute Bandara Halu Oleo (KDI)</p>
+
+  <div class="footer-contact">
+    <strong>Hubungi Kami</strong>
+    <!-- <p>Email: info@bandarahaluoleo.id</p> -->
+    <p>Instagram: @kendariskyroutes</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- DATA -->
+<script src="data-routes.js"></script>
+
+<!-- LOGIKA -->
+<script src="routes.js"></script>
+
+<!-- SIMPAN GAMBAR -->
+<script src="Save-Image.js"></script>
+
+<!-- MAPS -->
+<script src="map.js"></script>
+
+</body>
+</html>
