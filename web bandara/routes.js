@@ -312,7 +312,7 @@ function setLang(lang) {
    WAKTU
 ===================================================== */
 document.getElementById("last-update").textContent =
-  "20 Januari 2026 | 22:09 WITA";
+  "21 Januari 2026 | 00:03 WITA";
 
 function updateTime() {
   document.getElementById("current-time").textContent =
