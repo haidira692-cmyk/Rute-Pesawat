@@ -22,15 +22,44 @@
   </div>
 </header>
 
-<nav class="filter">
-  <button class="active" data-filter="all" onclick="filterRoutes('all')">Semua Rute</button>
-  <button data-filter="aktif" onclick="filterRoutes('Aktif')">Rute Aktif</button>
-  <button data-filter="aktifKembali" onclick="filterRoutes('Aktif Kembali')">Rute Aktif Kembali</button>
-  <button data-filter="akanDatang" onclick="filterRoutes('Akan Datang')">Rute Akan Datang</button>
-  <button data-filter="potensi" onclick="filterRoutes('Potensi')">Rute Potensial</button>
-  <button data-filter="tutupSementara" onclick="filterRoutes('Tutup Sementara')">Rute Ditutup Sementara</button>
-  <button data-filter="tutup" onclick="filterRoutes('Tutup')">Rute Ditutup</button>
-</nav>
+<div class="filter-wrapper">
+  <nav class="filter">
+    <button class="active" data-filter="all">
+      <span class="icon icon-all"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="aktif">
+      <span class="icon icon-aktif"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="aktifKembali">
+      <span class="icon icon-aktif-kembali"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="akanDatang">
+      <span class="icon icon-akan-datang"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="potensi">
+      <span class="icon icon-potensi"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="tutupSementara">
+      <span class="icon icon-tutup-sementara"></span>
+      <span class="label"></span>
+    </button>
+
+    <button data-filter="tutup">
+      <span class="icon icon-tutup"></span>
+      <span class="label"></span>
+    </button>
+  </nav>
+</div>
 
 
 <div id="empty-message" class="empty-message" style="display:none;"></div>
@@ -39,9 +68,7 @@
 
 <!-- Simpan Gambar -->
 <div class="export-buttons">
-  <button onclick="saveRouteImage()">🖼 Simpan Gambar Rute</button>
-  <button onclick="saveImageIG()">🖼 IG Feed (1:1)</button>
-  <button onclick="saveImageStory()">📱 IG Story (9:16)</button>
+  <button id="btn-save-image" onclick="saveRouteImage()"></button>
 </div>
 
 <section class="map-section">
@@ -60,11 +87,9 @@
 </div>
 
 <section class="info">
-  <p class="alert">
-    ⚠️ Jadwal dan operasional penerbangan dapat berubah sewaktu-waktu sesuai kebijakan maskapai dan kondisi operasional bandara.
-  </p>
-  <p><strong>Terakhir diperbarui:</strong> <span id="last-update"></span></p>
-  <p><strong>Waktu setempat:</strong> <span id="current-time"></span></p>
+  <p class="alert" id="disclaimer"></p>
+  <p><strong id="label-last-update"></strong> <span id="last-update"></span></p>
+  <p><strong id="label-local-time"></strong> <span id="current-time"></span></p>
 </section>
 
 
@@ -72,7 +97,7 @@
   <p>© 2026 Informasi Rute Bandara Halu Oleo (KDI)</p>
 
   <div class="footer-contact">
-    <strong>Hubungi Kami</strong>
+    <strong id="contact-title"></strong>
     <!-- <p>Email: info@bandarahaluoleo.id</p> -->
     <p>Instagram: @kendariskyroutes</p>
   </div>
