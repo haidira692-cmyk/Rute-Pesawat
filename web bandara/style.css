@@ -84,53 +84,40 @@ body {
 }
 
 /* FILTER */
-/* ================= FILTER RUTE (FIX MOBILE) ================= */
-
 /* ================= FILTER RUTE ================= */
 
+/* ===== FILTER WRAPPER ===== */
+.filter-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== FILTER BAR ===== */
 .filter {
-  background: white;
   display: flex;
   gap: 10px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  padding: 12px 16px;
+  background: #fff;
+  width: max-content;        /* ⬅️ PENTING */
+  margin: 0 auto;            /* ⬅️ CENTER JIKA MUAT */
 }
 
-/* ===== DESKTOP / LAPTOP ===== */
-@media (min-width: 769px) {
-  .filter {
-    justify-content: center;     /* ⬅️ BALIK KE TENGAH */
-    overflow-x: visible;
-    white-space: normal;
-  }
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .filter {
-    justify-content: flex-start;
-    overflow-x: auto;            /* ⬅️ SCROLL DI MOBILE */
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .filter::-webkit-scrollbar {
-    display: none;
-  }
-}
-
+/* tiap tombol */
 .filter button {
   flex: 0 0 auto;
   min-width: max-content;
-  padding: 8px 18px;
-  border: none;
+  padding: 8px 16px;
   border-radius: 999px;
   background: #e7f1ff;
   color: var(--primary);
   font-weight: 600;
-  font-size: 14px;
-  white-space: nowrap;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .filter button.active,
@@ -138,8 +125,6 @@ body {
   background: var(--primary);
   color: white;
 }
-
-
 
 /* GRID */
 main {
@@ -424,4 +409,41 @@ footer {
   color: #1f2937;
   font-size: 1.1rem;
   margin-bottom: 8px;
+}
+
+/* ===== ICON DOT FILTER ===== */
+.filter .icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* warna per status */
+.icon-all {
+  background: #64748b; /* abu */
+}
+
+.icon-aktif {
+  background: #22c55e; /* hijau */
+}
+
+.icon-aktif-kembali {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.icon-akan-datang {
+  background: #facc15; /* kuning */
+}
+
+.icon-potensi {
+  background: #a855f7; /* ungu */
+}
+
+.icon-tutup-sementara {
+  background: #fb923c; /* oranye */
+}
+
+.icon-tutup {
+  background: #ef4444; /* merah */
 }
