@@ -61,7 +61,12 @@ const TEXT = {
       "Sabtu": "Sabtu",
       "Minggu": "Minggu"
     },
-    mapTitle: "Peta Konektivitas Penerbangan dari Kendari (KDI)"
+    mapTitle: "Peta Konektivitas Penerbangan dari Kendari (KDI)",
+    empty: "Data Tidak Tersedia",
+    lastUpdated: "Terakhir diperbarui",
+    localTime: "Waktu setempat",
+    contact: "Hubungi Kami",
+    saveImage: "Simpan Gambar Rute"
   },
   en: {
     title: "Flight Routes of Halu Oleo Airport",
@@ -106,7 +111,12 @@ const TEXT = {
       "Sabtu": "Saturday",
       "Minggu": "Sunday"
     },
-    mapTitle: "Flight Connectivity Map from Kendari (KDI)"
+    mapTitle: "Flight Connectivity Map from Kendari (KDI)",
+    empty: "No data available",
+    lastUpdated: "Last updated",
+    localTime: "Local time",
+    contact: "Contact Us",
+    saveImage: "Save Route Image"
   }
 };
 
@@ -183,7 +193,19 @@ function renderRoutes(data) {
     container.innerHTML += `
       <div class="card" onclick="openRouteDetail('${r.origin}', '${r.destination}')">
         <div class="image-wrapper">
-          <span class="badge ${statusClass}">${r.status}</span>
+          <span class="badge ${statusClass}">
+            ${
+              statusClass === "aktif"
+                ? TEXT[currentLang].map.active
+                : statusClass === "aktif-kembali"
+                ? TEXT[currentLang].map.activeBack
+                : statusClass === "akan-datang"
+                ? TEXT[currentLang].map.upcoming
+                : statusClass === "potensi"
+                ? TEXT[currentLang].map.potential
+                : TEXT[currentLang].filter.tutup
+            }
+          </span>
           <img src="${r.image}" alt="${r.airline}" class="route-img">
         </div>
 
@@ -243,20 +265,37 @@ function filterRoutes(status) {
 
   document.querySelectorAll(".filter button")
     .forEach(b => b.classList.remove("active"));
-  event.target.classList.add("active");
+
+  const activeBtn = document.querySelector(
+    `.filter button[data-filter="${status}"]`
+  );
+
+  if (activeBtn) activeBtn.classList.add("active");
 
   const filtered =
     status === "all"
       ? routes
-      : routes.filter(r => r.status === status);
+      : routes.filter(r => r.status.toLowerCase() === status.toLowerCase());
 
   if (filtered.length === 0) {
     container.innerHTML = "";
     emptyBox.style.display = "block";
-    emptyBox.innerHTML = `<strong>Data Tidak Tersedia</strong>`;
+    emptyBox.innerHTML = `<strong>${TEXT[currentLang].empty}</strong>`;
   } else {
     emptyBox.style.display = "none";
     renderRoutes(filtered);
+  }
+  
+  window.addEventListener("load", () => {
+  centerFilterOnLoad();
+  });
+
+  scrollActiveFilterIntoView();
+}
+
+function updateEmptyMessage() {
+  if (emptyBox.style.display === "block") {
+    emptyBox.innerHTML = `<strong>${TEXT[currentLang].empty}</strong>`;
   }
 }
 
@@ -266,11 +305,51 @@ function filterRoutes(status) {
 function updateFilterLanguage() {
   document.querySelectorAll(".filter button").forEach(btn => {
     const key = btn.dataset.filter;
-    if (key && TEXT[currentLang].filter[key]) {
-      btn.textContent = TEXT[currentLang].filter[key];
+    const label = btn.querySelector(".label");
+    if (key && label && TEXT[currentLang].filter[key]) {
+      label.textContent = TEXT[currentLang].filter[key];
     }
   });
 }
+
+function updateSaveButtons() {
+  const btnSave = document.getElementById("btn-save-image");
+
+  if (btnSave) btnSave.innerHTML = `🖼 ${TEXT[currentLang].saveImage}`;
+}
+
+
+document.querySelectorAll(".filter button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    filterRoutes(btn.dataset.filter);
+  });
+});
+
+function scrollActiveFilterIntoView() {
+  const activeBtn = document.querySelector(".filter button.active");
+  if (!activeBtn) return;
+
+  activeBtn.scrollIntoView({
+    behavior: "smooth",
+    inline: "center",
+    block: "nearest"
+  });
+}
+
+function centerFilterOnLoad() {
+  const wrapper = document.querySelector(".filter-wrapper");
+  const filter = document.querySelector(".filter");
+  if (!wrapper || !filter) return;
+
+  const scrollPosition =
+    (filter.scrollWidth - wrapper.clientWidth) / 2;
+
+  wrapper.scrollTo({
+    left: scrollPosition,
+    behavior: "smooth"
+  });
+}
+
 
 /* =====================================================
    MAP TITLE INIT (FIX JUDUL PETA HILANG)
@@ -283,15 +362,20 @@ function updateMapTitle() {
 }
 
 function setLang(lang) {
-  // refresh map saat ganti bahasa
   currentLang = lang;
 
   document.querySelector(".overlay h1").textContent = TEXT[lang].title;
   document.querySelector(".overlay p").textContent = TEXT[lang].subtitle;
-  document.querySelector(".alert").textContent = TEXT[lang].disclaimer;
+  document.getElementById("disclaimer").textContent = TEXT[lang].disclaimer;
 
-  updateFilterLanguage();
-  updateMapTitle();
+  document.getElementById("label-last-update").textContent =
+    TEXT[lang].lastUpdated + ":";
+
+  document.getElementById("label-local-time").textContent =
+    TEXT[lang].localTime + ":";
+
+  document.getElementById("contact-title").textContent =
+    TEXT[lang].contact;
 
   renderRoutes(
     currentFilter === "all"
@@ -300,23 +384,34 @@ function setLang(lang) {
   );
 
   if (typeof initConnectivityMap === "function") {
-    initConnectivityMap(); // update isi map saja
+    initConnectivityMap();
   }
 
   document.querySelectorAll(".lang-toggle button")
     .forEach(b => b.classList.remove("active"));
   event.target.classList.add("active");
+
+  // 🔥 SATU SUMBER UPDATE UI
+  updateFilterLanguage();
+  updateMapTitle();
+  updateSaveButtons();   // ⬅️ WAJIB
+  updateLastUpdate();
+  updateTime();
+  updateEmptyMessage();
 }
+
 
 /* =====================================================
    WAKTU
 ===================================================== */
-document.getElementById("last-update").textContent =
-  "21 Januari 2026 | 00:03 WITA";
+// document.getElementById("last-update").textContent =
+//   "21 Januari 2026 | 00:03 WITA";
 
 function updateTime() {
+  const locale = currentLang === "en" ? "en-US" : "id-ID";
+
   document.getElementById("current-time").textContent =
-    new Date().toLocaleString("id-ID", {
+    new Date().toLocaleString(locale, {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -324,6 +419,20 @@ function updateTime() {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
+      timeZoneName: "short"
+    });
+}
+
+function updateLastUpdate() {
+  const locale = currentLang === "en" ? "en-US" : "id-ID";
+
+  document.getElementById("last-update").textContent =
+    new Date().toLocaleString(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
       timeZoneName: "short"
     });
 }
@@ -528,10 +637,31 @@ function generatePoster({ width, height = null, filename }) {
 
 setInterval(updateTime, 1000);
 updateTime();
+updateLastUpdate();
 
-/* =====================================================
-   INIT
-===================================================== */
-renderRoutes(routes);
-updateFilterLanguage();
-updateMapTitle(); // <<< INI YANG SEBELUMNYA HILANG
+document.addEventListener("DOMContentLoaded", () => {
+  // render awal
+  renderRoutes(routes);
+
+  // teks filter
+  updateFilterLanguage();
+
+  // judul peta
+  updateMapTitle();
+
+  // save buttons
+  updateSaveButtons();
+
+  // empty state (Data Tidak Tersedia)
+  if (routes.length === 0) {
+    emptyBox.style.display = "block";
+    emptyBox.innerHTML = `<strong>${TEXT[currentLang].empty}</strong>`;
+  }
+
+  // waktu
+  updateTime();
+  updateLastUpdate();
+
+  // posisi filter
+  centerFilterOnLoad();
+});
