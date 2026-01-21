@@ -86,26 +86,42 @@ body {
 /* FILTER */
 /* ================= FILTER RUTE (FIX MOBILE) ================= */
 
+/* ================= FILTER RUTE ================= */
+
 .filter {
   background: white;
   display: flex;
-  align-items: center;
   gap: 10px;
-  padding: 12px 12px;
-  overflow-x: auto;              /* ⬅️ SCROLL DI CONTAINER */
-  white-space: nowrap;           /* ⬅️ 1 BARIS */
-  -webkit-overflow-scrolling: touch;
+  padding: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,.05);
 }
 
-/* sembunyikan scrollbar tapi tetap bisa swipe */
-.filter::-webkit-scrollbar {
-  display: none;
+/* ===== DESKTOP / LAPTOP ===== */
+@media (min-width: 769px) {
+  .filter {
+    justify-content: center;     /* ⬅️ BALIK KE TENGAH */
+    overflow-x: visible;
+    white-space: normal;
+  }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .filter {
+    justify-content: flex-start;
+    overflow-x: auto;            /* ⬅️ SCROLL DI MOBILE */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .filter button {
-  flex: 0 0 auto;                /* ⬅️ JANGAN SHRINK */
-  min-width: max-content;        /* ⬅️ BIAR TEKS UTUH */
+  flex: 0 0 auto;
+  min-width: max-content;
   padding: 8px 18px;
   border: none;
   border-radius: 999px;
@@ -113,7 +129,7 @@ body {
   color: var(--primary);
   font-weight: 600;
   font-size: 14px;
-  white-space: nowrap;           /* ⬅️ JANGAN PECAH */
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -123,13 +139,6 @@ body {
   color: white;
 }
 
-/* sedikit kecilkan di layar sangat sempit */
-@media (max-width: 480px) {
-  .filter button {
-    font-size: 13px;
-    padding: 7px 16px;
-  }
-}
 
 
 /* GRID */
